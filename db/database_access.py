@@ -1,7 +1,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from database_setup import Base, Category, Item
+from database_setup import Base, Category, Item, User
 from config import default_sqlite_uri, initial_category_names
 from config import number_of_latest_items
               
@@ -68,7 +68,8 @@ def db_item(db_session, item_id):
 
 def db_latest_items(db_session, number_of_items=number_of_latest_items):
     """Return most recent items added to database."""
-    pass
+    latest_items = db_session.query(Item).order_by(Item.updated.desc()).limit(number_of_items)
+    return latest_items
 
 
 def db_save_item(session, item):

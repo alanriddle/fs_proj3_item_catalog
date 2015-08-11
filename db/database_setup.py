@@ -1,6 +1,7 @@
 import sys
+import datetime
 
-from sqlalchemy import Column, ForeignKey, Integer, String
+from sqlalchemy import Column, ForeignKey, Integer, String, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from sqlalchemy import create_engine
@@ -11,6 +12,12 @@ from config import default_sqlite_uri
 Base = declarative_base()
 
 ######## end of beginning configuration #####
+
+
+class User(Base):
+    __tablename__ = 'user'
+
+    id = Column(Integer, primary_key = True)
 
 
 class Category(Base):
@@ -28,6 +35,11 @@ class Item(Base):
 
     description = Column(String(250))
 
+    # when an item is created both created and updated fields equal.
+    # when an item is edited and saved, only updated field is changed.
+    created = Column(DateTime, default=datetime.datetime.utcnow)
+    updated = Column(DateTime, onupdate=datetime.datetime.now)
+
     category_id = Column(Integer, ForeignKey('category.id'))
     category = relationship(Category)
 
@@ -44,11 +56,6 @@ class Item(Base):
             'user' : self.user,
         }
 
-
-class User(Base):
-    __tablename__ = 'user'
-
-    id = Column(Integer, primary_key = True)
 
 
 ######### insert at end of file #########3

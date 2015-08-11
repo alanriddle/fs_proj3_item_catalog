@@ -2,15 +2,17 @@ from flask import (Flask, render_template, request, redirect,
                    url_for, flash, jsonify)
 app = Flask(__name__)
 
-from db.database_setup import Category, Item
+from db.database_setup import Category, Item, User
 from db.database_access import db_create_session, db_categories, db_category
 from db.database_access import db_items_in_category, db_item, db_save_item
-from db.database_access import db_delete_item
+from db.database_access import db_delete_item, db_latest_items
 
 from util import item_from_request_post
 
 
 session = db_create_session()
+
+is_logged_in = True
 
 ########## Routes for home page
 @app.route('/')
@@ -18,7 +20,8 @@ session = db_create_session()
 @app.route('/catalog/')
 def catalog():
     categories = db_categories(session)
-    return render_template('catalog.html', categories=categories)
+    latest_items = db_latest_items(session)
+    return render_template('catalog.html', categories=categories, latest_items=latest_items, is_logged_in=is_logged_in)
 
 
 @app.route('/catalog/json/')
@@ -31,7 +34,7 @@ def catalog_as_json():
 def show_items_in_category(category_id):
     category = db_category(session, category_id)
     items = db_items_in_category(session, category_id)
-    return render_template('category.html', category=category, items=items)
+    return render_template('category.html', category=category, items=items, is_logged_in=is_logged_in)
 
 
 @app.route('/catalog/category/<int:category_id>/json/')
@@ -44,7 +47,9 @@ def items_in_category_as_json(category_id):
 def show_item(category_id, item_id):
     category = db_category(session, category_id)
     item = db_item(session, item_id)
-    return render_template('item.html', category=category, item=item)
+    return render_template('item.html', category=category, item=item,
+                           is_logged_in=is_logged_in,  is_logged_in_owner=is_logged_in)
+
 
 
 @app.route('/catalog/category/<int:category_id>/item/<int:item_id>/json/')
@@ -87,7 +92,8 @@ def edit_item(category_id, item_id):
     else:
         category = db_category(session, category_id)
         item = db_item(session, item_id)
-        return render_template('edititem.html', category=category, item=item)
+        cancel_url = '/catalog/category/' + str(item.category_id) + '/item/' + str(item_id)
+        return render_template('edititem.html', category=category, item=item, cancel_url=cancel_url, is_logged_in=is_logged_in)
 
 
 ########## Route to delete item in category
