@@ -1,5 +1,5 @@
 from flask import (Flask, render_template, request, redirect,
-                   url_for, flash, jsonify)
+                   make_response, url_for, flash, jsonify)
 app = Flask(__name__)
 
 from db.database_setup import Category, Item, User
@@ -7,7 +7,9 @@ from db.database_access import db_create_session, db_categories, db_category
 from db.database_access import db_items_in_category, db_item, db_save_item
 from db.database_access import db_delete_item, db_latest_items
 
-from util import item_from_request_post
+from util import item_from_request_post, make_response
+from login import(upgrade_to_credentials, token_info, is_already_logged_in, 
+                  get_user_info, update_login_session)
 
 
 session = db_create_session()
@@ -112,6 +114,40 @@ def delete_item(category_id, item_id):
         item = db_item(session, item_id)
         return render_template('deleteitem.html', category=category, item=item)
 
+
+########### login 
+@app.route('/gconnect', methods=['POST'])
+def gconnect():
+    if request.args.get('state') != login_session['state']:
+        return json_response('Invalid state parameter', 400)
+
+    authorization_code = request.data
+
+    try:
+        credentials = upgrade_to_credentials(authorization_code)
+    except FlowExchangeError:
+        return json_response('Failed to upgrade the authorization code.', 401)
+
+    access_token_info = token_info(access_token)
+    if access_token_info.get('error') is not None:
+        error = access_token_info.get('error')
+        return json_response(error, 500)
+
+    gplus_id = credentials.id_token['sub']
+    if access_token_info['user_id'] != gplus_id:
+        return json_response("Token's user ID doesn't match given user ID.", 401)
+
+    if access_token_info['issued_to'] != CLIENT_ID:
+        return json_response("Token's client ID does not match this app.", 401)
+
+    if is_already_logged_in():
+        return json_response("Current user is already connected.", 401)
+
+    user_info = get_user_info(credentials.access_token)
+    update_login_session(credentials, gplus_id, user_info)
+
+    flash("You are now logged in as %s" % login_session['username'])
+    return render_template('gconnect.html', login_session=login_session)
 
 
 if __name__ == '__main__':

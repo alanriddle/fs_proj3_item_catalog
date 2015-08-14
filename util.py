@@ -1,3 +1,5 @@
+from flask import make_response
+
 from db.database_setup import Item
 
 
@@ -10,3 +12,12 @@ def item_from_request_post(request):
             item.description = request.form['description']
             return item
     return None   # name and description required
+
+
+def json_response(msg, code):
+    response = make_response(json.dumps(msg), code)
+    response.headers['Content-Type'] = 'application/json'
+    return response
+
+
+

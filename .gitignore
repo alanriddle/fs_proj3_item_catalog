@@ -4,3 +4,4 @@ __pycache__/
 *.pyc
 client_secrets.json
 *.db
+db/*.db
