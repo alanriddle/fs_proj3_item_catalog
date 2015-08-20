@@ -1,3 +1,9 @@
+from oauth2client.client import flow_from_clientsecrets
+import httplib2
+import json
+import requests
+
+
 def upgrade_to_credentials(authorization_code):
     oauth_flow = flow_from_clientsecrets('client_secrets.json', scope='')
     oauth_flow.redirect_uri = 'postmessage'
@@ -13,20 +19,20 @@ def token_info(access_token):
     return result
 
 
-def is_already_logged_in():
+def is_already_logged_in(login_session):
     stored_credentials = login_session.get('credentials')
     stored_gplus_id = login_session.get('gplus_id')
-    return stored_credentials is not None and gplus_id == stored_gplus_id
+    return stored_credentials is not None and stored_gplus_id is not None
 
 
 def get_user_info(access_token):
     userinfo_url = "https://www.googleapis.com/oauth2/v1/userinfo"
     params = {'access_token': access_token, 'alt': 'json'}
     answer = requests.get(userinfo_url, params=params)
-    return answer
+    return answer.json()
 
 
-def update_login_session(credentials, gplus_id, user_info):
+def update_login_session(login_session, credentials, gplus_id, user_info):
     login_session['credentials'] = credentials
     login_session['gplus_id'] = gplus_id
     login_session['username'] = user_info['name']
