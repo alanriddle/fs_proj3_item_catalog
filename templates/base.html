@@ -1,4 +1,4 @@
-{% macro header_bar(is_logged_in) %}
+{% macro header_bar(is_logged_in, omit_login_logout=False) %}
 {# adapted from getbootstrap example code #}
 <nav class="navbar navbar-inverse">
   <div class="container-fluid">
@@ -17,13 +17,15 @@
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
       </ul>
-      <ul class="nav navbar-nav navbar-right">
-        {% if is_logged_in %}
-        <li><a href="/gdisconnect"><button type="Link" class="btn btn-primary">Logout</button></a></li>
-        {% else %}
-        <li><a href="/login"><button type="Link" class="btn btn-primary">Login</button></a></li>
-        {% endif %}
-      </ul>
+      {% if not omit_login_logout %}
+          <ul class="nav navbar-nav navbar-right">
+            {% if is_logged_in %}
+            <li><a href="/gdisconnect"><button type="Link" class="btn btn-primary">Logout</button></a></li>
+            {% else %}
+            <li><a href="/login"><button type="Link" class="btn btn-primary">Login</button></a></li>
+            {% endif %}
+          </ul>
+      {% endif %}
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
 </nav>
@@ -37,6 +39,7 @@
 
         <!-- Optional theme -->
         <link rel="stylesheet" href="{{url_for('static', filename='bootstrap-theme.min.css')}}">
+
 
         <title>{% block title %}Placeholder title{% endblock %}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -67,5 +70,6 @@
         <script src="{{url_for('static', filename='jquery-1.11.3.js')}}"></script>
         <!-- Latest compiled and minified (bootstrap?)JavaScript -->
         <script src="{{url_for('static', filename='bootstrap.min.js')}}"></script>
+        <script src='https://apis.google.com/js/client:platform.js?onload=start' async defer></script>
     </body>
 </html>
