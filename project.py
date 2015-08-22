@@ -35,7 +35,13 @@ def catalog():
 
 @app.route('/catalog/json/')
 def catalog_as_json():
-    return 'routed by /catalog.json/'
+    categories = db_categories(session)
+    categories = [c.serialize for c in categories]
+
+    latest_items = db_latest_items(session)
+    latest_items = [i.serialize for i in latest_items]
+
+    return json.dumps({ 'categories': categories, 'latest_items': latest_items })
 
 
 ########## Routes for items in specified category
