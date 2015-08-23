@@ -55,7 +55,10 @@ def show_items_in_category(category_id):
 
 @app.route('/catalog/category/<int:category_id>/json/')
 def items_in_category_as_json(category_id):
-    return 'routed by /catalog/category/' + str(category_id) + '/json/'
+    category = db_category(session, category_id)
+    items = db_items_in_category(session, category_id)
+    items = [i.serialize for i in items]
+    return json.dumps({ 'category': category.serialize, 'items': items })
 
 
 ########## Routes for specified category and item
