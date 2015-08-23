@@ -70,11 +70,10 @@ def show_item(category_id, item_id):
                            is_logged_in=is_already_logged_in(login_session),
                            is_logged_in_owner=is_already_logged_in(login_session))
 
-
-
 @app.route('/catalog/category/<int:category_id>/item/<int:item_id>/json/')
 def item_as_json(category_id, item_id):
-    return 'routed by /catalog/category/' + str(category_id) + '/item/' + str(item_id) + '/json/'
+    item = db_item(session, item_id)
+    return json.dumps(item.serialize)
 
 
 ########## Routes for add item to category 
