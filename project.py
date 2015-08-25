@@ -166,8 +166,6 @@ def gconnect():
     update_login_session(login_session, credentials, gplus_id, user_info)
 
     flash("You are now logged in as %s" % login_session['username'])
-    # TODO - Remove - return render_template('gconnect.html', login_session=login_session)
-    # TODO - Remove - return redirect(url_for('show_items_in_category', category_id=category_id))
     return redirect(url_for('catalog'))
 
 
@@ -197,6 +195,7 @@ def gdisconnect():
         del login_session['id']
         del login_session['picture']
 
+        flash("You are now logged out.")
         return redirect(url_for('catalog'))
     else:
         # For whatever reason, the given token was invalid.
