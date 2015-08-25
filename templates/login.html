@@ -9,7 +9,7 @@
     <div id='signinButton'>
       <span class='g-signin'
         data-scope='openid'
-        data-clientid='249541171190-r05fhber5ri7dpqmgivletpjbfb1a2v6.apps.googleusercontent.com'
+        data-clientid='956967599668-mul6ri2pu4qa2fhvensa753pjd4b8k35.apps.googleusercontent.com'
         data-redirecturi='postmessage'
         data-accesstype='offline'
         data-cookiepolicy='single_host_origin'
@@ -50,4 +50,8 @@
         }
     }
     </script>
+{% endblock %}
+
+{% block additional_javascript %}
+        <script src='https://apis.google.com/js/client:platform.js?onload=start' async defer></script>
 {% endblock %}
