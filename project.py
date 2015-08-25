@@ -19,7 +19,7 @@ from util import item_from_request_post, json_response
 from login import (upgrade_to_credentials, token_info, is_already_logged_in, 
                    get_user_info, update_login_session)
 
-CLIENT_ID = json.loads(open('client_secrets.json', 'r').read())['web']['client_id']
+CLIENT_ID = json.loads(open('client_secret.json', 'r').read())['web']['client_id']
 session = db_create_session()
 
 ########## Routes for home page
