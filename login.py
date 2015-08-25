@@ -5,7 +5,7 @@ import requests
 
 
 def upgrade_to_credentials(authorization_code):
-    oauth_flow = flow_from_clientsecrets('client_secrets.json', scope='')
+    oauth_flow = flow_from_clientsecrets('client_secret.json', scope='')
     oauth_flow.redirect_uri = 'postmessage'
     credentials = oauth_flow.step2_exchange(authorization_code)
     return credentials
