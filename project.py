@@ -166,7 +166,7 @@ def gconnect():
     update_login_session(login_session, credentials, gplus_id, user_info)
 
     flash("You are now logged in as %s" % login_session['username'])
-    return redirect(url_for('catalog'))
+    return '<html></html>'
 
 
 
