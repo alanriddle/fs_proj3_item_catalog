@@ -13,11 +13,12 @@ from oauth2client.client import FlowExchangeError
 from db.database_setup import Category, Item, User
 from db.database_access import db_create_session, db_categories, db_category
 from db.database_access import db_items_in_category, db_item, db_save_item
-from db.database_access import db_delete_item, db_latest_items
+from db.database_access import db_delete_item, db_latest_items, db_update_user
+
 
 from util import item_from_request_post, json_response
 from login import (upgrade_to_credentials, token_info, is_already_logged_in, 
-                   get_user_info, update_login_session)
+                   is_already_logged_in_owner, get_user_info, update_login_session)
 
 CLIENT_ID = json.loads(open('client_secret.json', 'r').read())['web']['client_id']
 session = db_create_session()
@@ -68,7 +69,7 @@ def show_item(category_id, item_id):
     item = db_item(session, item_id)
     return render_template('item.html', category=category, item=item,
                            is_logged_in=is_already_logged_in(login_session),
-                           is_logged_in_owner=is_already_logged_in(login_session))
+                           is_logged_in_owner=is_already_logged_in_owner(login_session, item.id))
 
 @app.route('/catalog/category/<int:category_id>/item/<int:item_id>/json/')
 def item_as_json(category_id, item_id):
@@ -81,8 +82,9 @@ def item_as_json(category_id, item_id):
 def add_item(category_id):
     if request.method == 'POST':
         item = item_from_request_post(request)
-        if item:
+        if item and is_already_logged_in(login_session):
             item.category_id = category_id
+            item.user_id = login_session['id']
             db_save_item(session, item)
             return redirect(url_for('show_items_in_category', category_id=category_id))
         else:
@@ -164,6 +166,7 @@ def gconnect():
     user_info = get_user_info(credentials.access_token)
     print 'user_info = ' + str(user_info)
     update_login_session(login_session, credentials, gplus_id, user_info)
+    db_update_user(session, login_session)
 
     flash("You are now logged in as %s" % login_session['username'])
     return '<html></html>'

@@ -24,12 +24,13 @@ def db_add_categories(session, category_names):
         session.commit()    # if a lot, consider batching in a transaction
 
 
-def db_add_item_using_category_name(session, category_name, item_name, item_description):
+def db_add_item_using_category_name(session, category_name, item_name, item_description, user_id):
     """Add an item to database with specified category_name.
 
     Example:
         To add a 'soccer ball' item:
-            db_add_item_using_category_name(session, 'Soccer', 'Soccer ball', 'Fast, light official soccer ball.')
+            db_add_item_using_category_name(session, 'Soccer', 'Soccer ball',
+                                            'Fast, light official soccer ball.', login_session['id'])
             (where 'Soccer' is a preexisting category name.)
     """
     category = session.query(Category).filter_by(name=category_name).one()
@@ -81,3 +82,15 @@ def db_delete_item(session, item):
     """Delete item in database."""
     session.delete(item)
     session.commit()
+
+
+def db_update_user(db_session, login_session):
+    # if user is not already in db:
+    #     insert into db
+    user_id = login_session['id']
+    user = db_session.query(User).filter_by(id=user_id).all()
+    if not user:
+        user = User()
+        user.id = user_id
+        db_session.add(user)
+        db_session.commit()

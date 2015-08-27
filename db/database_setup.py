@@ -12,12 +12,20 @@ from config import default_sqlite_uri
 Base = declarative_base()
 
 ######## end of beginning configuration #####
-
-
 class User(Base):
     __tablename__ = 'user'
 
-    id = Column(Integer, primary_key = True)
+    id = Column(String(80), primary_key = True)
+    name = Column(String(80))
+
+    @property
+    def serialize(self):
+        # Returns object data in easily serializeable format
+        return {
+            'id': self.id,
+            'name': self.name
+        }
+    
 
 
 class Category(Base):
@@ -32,7 +40,7 @@ class Category(Base):
         return {
             'id': self.id,
             'name': self.name
-            }
+        }
 
 
 class Item(Base):
@@ -51,7 +59,7 @@ class Item(Base):
     category_id = Column(Integer, ForeignKey('category.id'))
     category = relationship(Category)
 
-    user_id = Column(Integer, ForeignKey('user.id'))
+    user_id = Column(String(80), ForeignKey('user.id'))
     user = relationship(User)
 
     @property
