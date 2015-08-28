@@ -132,7 +132,8 @@ def delete_item(category_id, item_id):
     else:
         category = db_category(session, category_id)
         item = db_item(session, item_id)
-        return render_template('deleteitem.html', category=category, item=item)
+        return render_template('deleteitem.html', category=category, item=item,
+                               is_logged_in=is_already_logged_in(login_session))
 
 
 ########### login 
