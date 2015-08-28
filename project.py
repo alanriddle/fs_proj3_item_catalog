@@ -18,7 +18,7 @@ from db.database_access import db_delete_item, db_latest_items, db_update_user
 
 from util import item_from_request_post, json_response
 from login import (upgrade_to_credentials, token_info, is_already_logged_in, 
-                   is_already_logged_in_owner, get_user_info, update_login_session)
+                   is_logged_in_as_owner, get_user_info, update_login_session)
 
 CLIENT_ID = json.loads(open('client_secret.json', 'r').read())['web']['client_id']
 session = db_create_session()
@@ -69,7 +69,7 @@ def show_item(category_id, item_id):
     item = db_item(session, item_id)
     return render_template('item.html', category=category, item=item,
                            is_logged_in=is_already_logged_in(login_session),
-                           is_logged_in_owner=is_already_logged_in_owner(login_session, item.id))
+                           is_logged_in_owner=is_logged_in_as_owner(login_session, item.user_id))
 
 @app.route('/catalog/category/<int:category_id>/item/<int:item_id>/json/')
 def item_as_json(category_id, item_id):
@@ -101,7 +101,7 @@ def edit_item(category_id, item_id):
     if request.method == 'POST':
         item_from_database = db_item(session, item_id)
         item_from_form = item_from_request_post(request)
-        if item_from_form:
+        if item_from_form and is_logged_in_as_owner(login_session, item_from_database.user_id):
             item_from_database.name = item_from_form.name
             item_from_database.description = item_from_form.description
 
@@ -123,7 +123,7 @@ def edit_item(category_id, item_id):
 def delete_item(category_id, item_id):
     if request.method == 'POST':
         item = db_item(session, item_id)
-        if item:
+        if item and is_logged_in_as_owner(login_session, item.user_id):
             db_delete_item(session, item)
             return redirect(url_for('show_items_in_category', category_id=category_id))
         else:

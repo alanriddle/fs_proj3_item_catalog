@@ -25,7 +25,7 @@ def is_already_logged_in(login_session):
     return stored_credentials is not None and stored_gplus_id is not None
 
 
-def is_already_logged_in_owner(login_session, item_user_id):
+def is_logged_in_as_owner(login_session, item_user_id):
     user_id = login_session['id']
     return is_already_logged_in(login_session) and (user_id == item_user_id)
 
