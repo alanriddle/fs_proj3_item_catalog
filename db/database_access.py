@@ -7,7 +7,6 @@ from config import number_of_latest_items
               
 
 def db_create_session(sqlite_db_uri=default_sqlite_uri):
-    print 'entering db_create_session()...'
     engine = create_engine(sqlite_db_uri)
     Base.metadata.bind = engine
 
