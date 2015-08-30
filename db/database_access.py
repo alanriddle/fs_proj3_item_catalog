@@ -68,7 +68,7 @@ def db_item(db_session, item_id):
 
 def db_latest_items(db_session, number_of_items=number_of_latest_items):
     """Return most recent items added to database."""
-    latest_items = db_session.query(Item).order_by(Item.updated.desc()).limit(number_of_items)
+    latest_items = db_session.query(Item).order_by(Item.created.desc()).limit(number_of_items)
     return latest_items
 
 
