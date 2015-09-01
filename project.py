@@ -105,8 +105,12 @@ def add_item(category_id):
             # problem with item, try again
             return redirect(url_for('add_item', category_id=category_id))
     else:
-        category = db_category(session, category_id)
-        return render_template('additem.html', category=category)
+        if is_already_logged_in(login_session):
+            category = db_category(session, category_id)
+            return render_template('additem.html', category=category)
+        else:
+            flash("To add an item, you must first log in.")
+            return redirect(url_for('showLogin'))
 
 
 ########## Route to edit item in category
