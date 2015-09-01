@@ -1,3 +1,11 @@
+"""
+This file contains the following configurable variables:
+    - default_sqlite_url - catalog.db
+    - initial_category_names - list of sporting goods categories
+    - number_of_latest_items - how many of the latest items to display
+                               on the main catalog page
+"""
+
 import os
 
 

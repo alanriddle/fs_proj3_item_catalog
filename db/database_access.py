@@ -1,3 +1,13 @@
+"""
+This file contains functions to access the database. These functions
+are prefixed by 'db_' to emphasize that they query, update, or delete
+objects in the database.
+
+SQLAlchemy is used as the Object-Relational Manager.
+
+Table/class definitions are contained in db/database_setup.py.
+"""
+
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 

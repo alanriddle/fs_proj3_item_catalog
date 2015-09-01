@@ -1,3 +1,9 @@
+"""
+This file loads the initial category names into the database.
+
+It is run from the command line.
+"""
+
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 

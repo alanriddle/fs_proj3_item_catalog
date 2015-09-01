@@ -1,3 +1,11 @@
+"""
+This file contains convenience/helper functions for project.py (that
+are not specific to logging in or out - those helper functions 
+found in login.py).
+
+The intent of this file is to simplify code in project.py.
+"""
+
 import json
 from flask import make_response
 

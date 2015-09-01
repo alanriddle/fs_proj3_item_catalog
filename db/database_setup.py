@@ -1,3 +1,13 @@
+"""
+This file contains the SQL Alchemy classes used to define the database
+tables.
+
+The database tables 'user', 'category', and 'item' are defined here.
+
+Functions to query or modify the database are found in 
+db/database_access.py.
+"""
+
 import sys
 import datetime
 

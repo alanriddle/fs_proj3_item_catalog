@@ -1,3 +1,11 @@
+"""
+This file contains convenience/helper functions for logging in and 
+logging out functions gconnect()and gdisconnect() found in project.py.
+
+The intent is for the gconnect() and gdisconnect() functions to be
+clearer by using these helper functions.
+"""
+
 from oauth2client.client import flow_from_clientsecrets
 import httplib2
 import json

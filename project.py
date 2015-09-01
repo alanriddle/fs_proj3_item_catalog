@@ -1,3 +1,17 @@
+"""
+This file is the top level file for the Item Catalog project and
+uses the Flask framework.
+
+This project allows users to add items to categories. Users can also
+edit and delete their own items.
+
+JSON endpoints are provided for catalog, category, and item.
+
+Authentication is handled by Google's OAuth api.
+
+This file contains routes and view functions.
+"""
+
 import random, string, httplib2
 import json
 
