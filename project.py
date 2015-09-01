@@ -131,9 +131,13 @@ def edit_item(category_id, item_id):
     else:
         category = db_category(session, category_id)
         item = db_item(session, item_id)
-        cancel_url = '/catalog/category/' + str(item.category_id) + '/item/' + str(item_id)
-        return render_template('edititem.html', category=category, item=item, cancel_url=cancel_url,
-                               is_logged_in=is_already_logged_in(login_session))
+        if is_logged_in_as_owner(login_session, item):
+            cancel_url = '/catalog/category/' + str(item.category_id) + '/item/' + str(item_id)
+            return render_template('edititem.html', category=category, item=item, cancel_url=cancel_url,
+                                   is_logged_in=is_already_logged_in(login_session))
+        else:
+            flash("To edit an item, you must first be logged in as the item's owner.")
+            return redirect(url_for('showLogin'))
 
 
 ########## Route to delete item in category
