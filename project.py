@@ -191,7 +191,6 @@ def gconnect():
         return json_response("Current user is already connected.", 401)
 
     user_info = get_user_info(credentials.access_token)
-    print 'user_info = ' + str(user_info)
     update_login_session(login_session, credentials, gplus_id, user_info)
     db_update_user(session, login_session)
 

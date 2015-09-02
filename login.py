@@ -34,10 +34,8 @@ def is_already_logged_in(login_session):
 
 
 def is_logged_in_as_owner(login_session, item_user_id):
-    user_id = login_session.get('id', None)
-    return (user_id and 
-            is_already_logged_in(login_session) and
-            (user_id == item_user_id))
+    return  (is_already_logged_in(login_session) and
+             (item_user_id == login_session.get('id', None)))
 
 
 def get_user_info(access_token):

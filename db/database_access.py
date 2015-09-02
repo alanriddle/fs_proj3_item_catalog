@@ -53,8 +53,6 @@ def db_add_item_using_category_name(session, category_name, item_name, item_desc
 def db_categories(db_session):
     """List of all categories in database sorted alphabetically."""
     categories = db_session.query(Category).order_by(Category.name).all()
-    print 'db_categories: ...'
-    print 'len(categories) = ' + str(len(categories))
     return categories
 
 
