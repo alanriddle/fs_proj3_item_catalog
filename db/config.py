@@ -15,6 +15,11 @@ import os
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 default_sqlite_uri = 'sqlite:///' +  os.path.join(BASE_DIR, 'catalog.db')
 
+# add support for Postgresql database
+sqlalchemy_database_uri = "postgresql://catalog:catalog_super_secret@localhost/catalog"
+
+default_database_uri = sqlalchemy_database_uri
+
 initial_category_names = [
      'Soccer', 'Basketball', 'Baseball', 'Frisbee',
      'Snowboarding','Rock Climbing', 'Foosball',

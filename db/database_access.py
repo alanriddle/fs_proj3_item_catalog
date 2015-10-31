@@ -12,12 +12,12 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 from database_setup import Base, Category, Item, User
-from config import default_sqlite_uri, initial_category_names
+from config import default_database_uri, initial_category_names
 from config import number_of_latest_items
               
 
-def db_create_session(sqlite_db_uri=default_sqlite_uri):
-    engine = create_engine(sqlite_db_uri)
+def db_create_session(database_uri=default_database_uri):
+    engine = create_engine(database_uri)
     Base.metadata.bind = engine
 
     DBSession = sessionmaker(bind=engine)

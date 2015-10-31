@@ -16,7 +16,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from sqlalchemy import create_engine
 
-from config import default_sqlite_uri
+from config import default_database_uri
 
 
 Base = declarative_base()
@@ -88,11 +88,11 @@ class Item(Base):
 
 ######### insert at end of file #########3
 
-def create_sqlite_database(sqlite_database_name):
-    engine = create_engine(sqlite_database_name)
+def create_database(database_uri):
+    engine = create_engine(database_uri)
     Base.metadata.create_all(engine)
 
 
 if __name__ == '__main__':
-    create_sqlite_database(default_sqlite_uri)
+    create_database(default_database_uri)
 
